@@ -11,22 +11,35 @@ export default function App() {
     setItem((items) => items.filter((item) => item.id !== id));
   }
 
-  function handleToggle(id){
-    setItem(items => items.map(item => item.id === id ? {...item, packed: !item.packed}: item))
+  function handleToggle(id) {
+    setItem((items) =>
+      items.map((item) =>
+        item.id === id ? { ...item, packed: !item.packed } : item
+      )
+    );
   }
 
-  function handleClearList(){
-    const confirm = window.confirm('Are you sure you want to delete this file?')
+  function handleClearList() {
+    const confirm = window.confirm(
+      "Are you sure you want to delete this file?"
+    );
     if (confirm) setItem([]);
   }
 
   return (
-    <div className="app">
-      <Logo />
-      <Form onAddItems={handleAddItem} />
-      <ParkingList items={item} onClearList ={handleClearList} onDeleteItem={handleDeleteItem} onToggleItem={handleToggle}/>
-      <Stats items={item}/>
-    </div>
+    <main>
+      <div className="app">
+        <Logo />
+        <Form onAddItems={handleAddItem} />
+        <ParkingList
+          items={item}
+          onClearList={handleClearList}
+          onDeleteItem={handleDeleteItem}
+          onToggleItem={handleToggle}
+        />
+        <Stats items={item} />
+      </div>
+    </main>
   );
 }
 
@@ -79,27 +92,35 @@ function Form({ onAddItems }) {
   );
 }
 
-function ParkingList({ items, onDeleteItem, onToggleItem, onClearList}) {
-  const [sortBy, setSortBy] = useState('input');
+function ParkingList({ items, onDeleteItem, onToggleItem, onClearList }) {
+  const [sortBy, setSortBy] = useState("input");
 
   let sortByItem;
 
-  if(sortBy === 'input') sortByItem = items;
+  if (sortBy === "input") sortByItem = items;
 
-  if (sortBy === 'description') {
-     sortByItem = items.slice().sort((a,b) => a.description.localeCompare(b.description));
+  if (sortBy === "description") {
+    sortByItem = items
+      .slice()
+      .sort((a, b) => a.description.localeCompare(b.description));
   }
 
-  if(sortBy === 'packed' ) {
-     sortByItem = items.slice().sort((a,b) => Number(a.packed) - Number(b.packed));
+  if (sortBy === "packed") {
+    sortByItem = items
+      .slice()
+      .sort((a, b) => Number(a.packed) - Number(b.packed));
   }
 
-  
   return (
     <div className="list">
       <ul>
         {sortByItem.map((items) => (
-          <Items items={items} onToggleItem={onToggleItem} onDeleteItem={onDeleteItem} key={items.id} />
+          <Items
+            items={items}
+            onToggleItem={onToggleItem}
+            onDeleteItem={onDeleteItem}
+            key={items.id}
+          />
         ))}
       </ul>
 
@@ -111,18 +132,19 @@ function ParkingList({ items, onDeleteItem, onToggleItem, onClearList}) {
         </select>
         <button onClick={onClearList}>Clear list</button>
       </div>
-
     </div>
   );
 }
 
-function Items({ items, onDeleteItem,onToggleItem }) {
+function Items({ items, onDeleteItem, onToggleItem }) {
   return (
     <li>
-      <input type="checkbox" value={items.packed}  onChange={() => onToggleItem(items.id)}/>
-      <span>
-        {items.quantity}
-      </span>
+      <input
+        type="checkbox"
+        value={items.packed}
+        onChange={() => onToggleItem(items.id)}
+      />
+      <span>{items.quantity}</span>
       <span style={items.packed ? { textDecoration: "line-through" } : {}}>
         {items.description}
       </span>
@@ -131,27 +153,25 @@ function Items({ items, onDeleteItem,onToggleItem }) {
   );
 }
 
-function Stats({items}) {
-  if(!items.length) {
-    return(
+function Stats({ items }) {
+  if (!items.length) {
+    return (
       <p className="stats">
-        <em>
-          Start adding some item to you packing list 🚀
-        </em>
+        <em>Start adding some item to you packing list 🚀</em>
       </p>
-    )
-  } 
+    );
+  }
 
   const numItems = items.length;
-  const numPacked = items.filter(item => item.packed).length;
+  const numPacked = items.filter((item) => item.packed).length;
 
   const percentage = Math.round((numPacked / numItems) * 100);
   return (
     <footer className="stats">
       <em>
-      {percentage === 100 ? "You got everthing! ready to go ✈️" :
-      `💼 You have ${numItems} items on your list and you alredy parked ${numPacked} (${percentage}%)`
-      }
+        {percentage === 100
+          ? "You got everthing! ready to go ✈️"
+          : `💼 You have ${numItems} items on your list and you alredy parked ${numPacked} (${percentage}%)`}
       </em>
     </footer>
   );

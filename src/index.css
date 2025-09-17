@@ -10,6 +10,38 @@ html {
   font-size: 62.5%;
 }
 
+@media (max-width: 600px) {
+  main {
+    position: relative;
+    overflow: hidden;
+    filter: blur(4px);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  body::after {
+    content: 'This is a desktop view only. Please use your desktop to access this site.';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: fit-content;
+    height: 100vh;
+    background: rgba(55, 56, 56, 0.95);
+    color: #fff;
+    font-size: 2.2rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    text-align: center;
+    filter: none;
+    pointer-events: all;
+    user-select: text;
+    padding: 2rem;
+  }
+}
+
 body {
   font-size: 2.4rem;
   font-family: sans-serif;
